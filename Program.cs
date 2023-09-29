@@ -1,8 +1,20 @@
+using TwilioWhatsAppTriviaApp.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(40);
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpClient("trivia", config =>
+    config.BaseAddress = new Uri("https://the-trivia-api.com/v2/")
+);
+builder.Services.AddScoped<TriviaService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -16,9 +28,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllers();
 
