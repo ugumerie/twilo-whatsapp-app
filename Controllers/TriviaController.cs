@@ -18,8 +18,8 @@ public class TriviaController : TwilioController
     private const string SessionKeyTotalQuestions = "TotalQuestions";
     private const string SessionKeyQuestions = "Questions";
 
-    private static readonly string[] StartCommands = { "START", "S" };
-    private static readonly string[] OptionValues = { "A", "B", "C", "D" };
+    private static readonly string[] StartCommands = ["START", "S"];
+    private static readonly string[] OptionValues = ["A", "B", "C", "D"];
 
     private readonly TriviaService _triviaService;
 

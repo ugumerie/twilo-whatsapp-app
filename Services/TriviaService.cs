@@ -2,15 +2,10 @@ using TwilioWhatsAppTriviaApp.Models;
 
 namespace TwilioWhatsAppTriviaApp.Services;
 
-public class TriviaService
+public class TriviaService(IHttpClientFactory httpClientFactory)
 {
     private const string TheTriviaApiUrl = @"https://the-trivia-api.com/api/questions?limit=3";
-    private readonly IHttpClientFactory _httpClientFactory;
-
-    public TriviaService(IHttpClientFactory httpClientFactory)
-    {
-        _httpClientFactory = httpClientFactory;
-    }
+    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
 
     public async Task<IEnumerable<TriviaApiResponse>?> GetTriviaAsync()
     {
@@ -20,7 +15,7 @@ public class TriviaService
 
     public List<Question> ConvertTriviaToQuestions(IEnumerable<TriviaApiResponse> triviaQuestions)
     {
-        List<Question> newQuestions = new();
+        List<Question> newQuestions = [];
         foreach (var question in triviaQuestions)
         {
             var options = new List<(string option, bool isCorrect)>
@@ -33,7 +28,7 @@ public class TriviaService
 
             // Randomize the options
             Random random = Random.Shared;
-            options = options.OrderBy(_ => random.Next()).ToList();
+            options = [.. options.OrderBy(_ => random.Next())];
 
             newQuestions.Add(new Question
             {
